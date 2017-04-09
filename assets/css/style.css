@@ -1,0 +1,39 @@
+.jumbotron, .jumbotron-fluid{
+	padding-top:5px;
+	background-image: url('../images/jumbobg.png');
+	height:auto;/*fix based on media query*/
+	border-bottom-style:solid;
+	border-bottom-width: 10px;
+	border-bottom-color:#000000;
+}
+
+/*Style text with shadow*/
+.jumbotron h1{
+	margin-top:10px;
+	text-shadow:	-2px -2px 0 #FFF,
+    				2px -2px 0 #FFF,
+   					-2px 2px 0 #FFF,
+    				2px 2px 0 #FFF;
+
+}
+
+body{
+	background-image: url('../images/pixiecup.jpg');
+}
+
+/*
+.gradient-text{ 
+    background-image:-webkit-linear-gradient(left, #00c6c4, #aa0395, #fff);
+    background-image:linear-gradient(to right, #00c6c4, #aa0395, #fff);
+	color:transparent;
+	-webkit-background-clip: text;
+	background-clip: text;
+}
+*/
+
+.col-sm-4 {
+	background-color: #FFFFFF;
+	border-style:double;
+	border-width:5px;
+	border-color:#000000;
+}
