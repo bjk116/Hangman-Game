@@ -1,17 +1,24 @@
-var wordToSongs = {
+var hangmanWordBank = {
 	"Nirvana":"Smells Like Teen Spirit",
 	"Britney Spears":"Hit Me Baby One More Time",
-
-	randomSong: function(){
-		var size = Object.keys(this).length-1;
-		console.log(size);
-		return this[(Math.floor(size * Math.random()))];
-	}
+	"Bush":"Glyercine",
+	"Goo Goo Dolls":"Iris",
+	"SmashMouth":"All Star",
+	"Metallica":"Enter Sandman",
 };
 
 
+//Keep functions out because it is messing up key count, helper functions
+function getWord(){
+	var size=Object.keys.length(hangmanWordBank);
+	var random = Math.floor( Math.random() * size);
+	for (var i in hangmanWordBank) {
+			console.log('hangmanWordBank = ' + i + " is " + hangmanWordBank[i]);
+	}
+}
 
-console.log("Random Word is: " + wordToSongs.randomSong());
+getWord();
+//console.log("Random Word is: " + hangmanWordBank.randomWord());
 //start game
 //pick a random word
 //figure out number of random guesses allowed based on lenght of word
