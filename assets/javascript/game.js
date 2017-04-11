@@ -22,13 +22,34 @@ function pickRandomWord(obj) {
 }
 
 //function to display guessed letters
-function displayGuessedLetters(guessarr, wordarr){
-
+function displayHiddenWord(guessArr, wordArr){
+	var dispArr=[];
+	for (var i=0; i<wordArr.length;i++) {
+		if(wordArr[i]==' ') {
+			dispArr.push(' ');
+		} else if (guessArr[i]==true) {
+			dispArr.push(wordArr[i]);
+		} else {
+			dispArr.push('_');
+		}
+	}
+	dispArr=dispArr.join(' ');
+	console.log(dispArr);
 }
 
 //function to check win condition
-function winCondition(arr) {
-
+function winCondition(guessA) {
+	var count=0;
+	for (var i=0;i<guessA.length;i++) {
+		if(guessA==true) {
+			count++;
+		}
+	}
+	if(count==guessA.length) { //if all letters are guesed
+		return true;
+	} else {
+		return false;
+	}
 }
 
 //create array of false spaces for usage when displaying word and win condition
@@ -85,15 +106,20 @@ document.onkeyup = function (event) {
 		console.log(wordToGuess);
 		console.log(guessArr[0]);
 		console.log(guessArr[1]);
+		displayHiddenWord(guessArr, wordToGuess);
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
 		guessArr=updateGuessArray(pressedKey,guessArr,wordToGuess);
-		console.log('In Word!');
-		console.log(guessArr[0]);
+		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
+		displayHiddenWord(guessArr, wordToGuess);
 	} else {
 		console.log('Letter not in Word');
+		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
+		displayHiddenWord(guessArr, wordToGuess);
 	}
+
+
 	
 
 	
