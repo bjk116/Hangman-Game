@@ -34,7 +34,7 @@ function displayHiddenWord(guessArr, wordArr){
 		}
 	}
 	dispArr=dispArr.join(' ');
-	console.log(dispArr);
+	return dispArr;
 }
 
 //function to check win condition
@@ -87,9 +87,12 @@ function letterInWord(letter, WordTG){
 var wordToGuess, pressedKey, correctGuesses, allowedGuesses;
 var lettersGuessed=[];
 var guessArr=[];
-var wins, losses;
+var wins=0;
+var losses=0;
 var pressedKey;
 var specialKey;
+var hiddenWord;
+var band;
 
 document.onkeyup = function (event) {
  	specialKey = event.keyCode;//for checking enter, spacebar
@@ -97,29 +100,34 @@ document.onkeyup = function (event) {
 	pressedKey=pressedKey.toLowerCase();
 
 	//Start/retstart word, pick word, reset boolean variables and necessary resets
-	if(specialKey===13){
+	if(specialKey===13){ //possibly set this to if wins / losses =0 or game just ended
 		wordToGuess=pickRandomWord(hangmanWordBank);
+		band=wordToGuess;
 		wordToGuess=wordToGuess.split('');
 		guessArr=createBoolWord(wordToGuess);
 		//figure out number of random guesses allowed based on lenght of word, minimum 6 guesses, max 10
 		allowedGuesses=Math.max(Math.min(Math.floor(wordToGuess.length*.8),10), 6);
 		console.log(wordToGuess);
-		console.log(guessArr[0]);
-		console.log(guessArr[1]);
-		displayHiddenWord(guessArr, wordToGuess);
+		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
+		console.log(hiddenWord);
+		$('#word').html(hiddenWord);
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
 		guessArr=updateGuessArray(pressedKey,guessArr,wordToGuess);
 		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
-		displayHiddenWord(guessArr, wordToGuess);
+		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
+		$('#word').html(hiddenWord);
 	} else {
 		console.log('Letter not in Word');
 		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
 		displayHiddenWord(guessArr, wordToGuess);
 	}
 
-
+	if(winCondition) {
+		wins++;
+		$('#titleOfSong').html(hangmanWordBank[band] + " By " + band);
+	}
 	
 
 	

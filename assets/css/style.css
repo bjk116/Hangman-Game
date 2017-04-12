@@ -37,3 +37,7 @@ body{
 	border-width:5px;
 	border-color:#000000;
 }
+
+#titleOfSong {
+	background-color:#CCCCCC;
+}
