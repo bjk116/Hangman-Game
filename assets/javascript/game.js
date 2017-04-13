@@ -1,6 +1,6 @@
 var hangmanWordBank = {
 	"Nirvana":["Smells Like Teen Spirit", "assets/images/Nirvana.jpg"],
-	"Britney Spears":["Hit Me Baby One More Time", "assets/images/BirtneySpears.jpg"],
+	"Britney Spears":["Hit Me Baby One More Time", "assets/images/BritneySpears.jpg"],
 	"Bush":["Glyercine", "assets/images/Bush.jpg"],
 	"Goo Goo Dolls":["Iris", "assets/images/GooGooDolls.jpg"],
 	"SmashMouth":["All Star", "assets/images/Smashmouth.jpg"],
@@ -8,7 +8,7 @@ var hangmanWordBank = {
 	"The Gin Blossoms":["Hey Jealousy", "assets/images/TheGinBlossoms.jpg"],
 	"Backstreet Boys": ["I Want it That Way", "assets/images/BackstreetBoys.jpg"],
 	"Shaggy": ["Wasn't Me", "assets/images/Shaggy.jpg"],
-	"Destinys Child": ["Say My Name", "assets/images/DesintysChild.jpg"],
+	"Destinys Child": ["Say My Name", "assets/images/DesetinysChild.jpg"],
 };
 
 //Ask why this works, not sure - http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
@@ -150,6 +150,8 @@ document.onkeyup = function (event) {
 		$('#losses').html('Losses: '+losses);
 		$('#guessesLeft').html('Guesses: '+allowedGuesses);
 		$('#begin').html('');
+		$('#rules').html('');
+		$('#instructions').html('');
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
