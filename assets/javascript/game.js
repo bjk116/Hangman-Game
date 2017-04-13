@@ -38,18 +38,20 @@ function displayHiddenWord(guessArr, wordArr){
 }
 
 //function to check win condition
-function winCondition(guessA) {
-	var count=0;
-	for (var i=0;i<guessA.length;i++) {
-		if(guessA==true) {
-			count++;
+function checkWin (guessA) {
+	var check=0;
+	console.log('checking');
+	for(var z=0;z<guessA.length;z++) {
+		if (guessA[z]==true) {
+			check++;	
 		}
 	}
-	if(count==guessA.length) { //if all letters are guesed
+	console.log(check+"true out of"+guessA.length);
+	if(check==guessA.length){
 		return true;
-	} else {
-		return false;
 	}
+
+	return false;
 }
 
 //create array of false spaces for usage when displaying word and win condition
@@ -75,9 +77,9 @@ function updateGuessArray(letter, guessA, wordTG){
 	return guessA;
 }
 
-function letterInWord(letter, WordTG){
-	for (var i=0;i<WordTG.length;i++) {
-		if(WordTG[i].toLowerCase()==letter){
+function letterInWord(letter, WordT){
+	for (var i=0;i<WordT.length;i++) {
+		if(WordT[i].toLowerCase()==letter){
 			return true;
 		}
 	}
@@ -93,14 +95,21 @@ var pressedKey;
 var specialKey;
 var hiddenWord;
 var band;
+var winCondition=false;
+var started=false;
+var win=false;
+var lose=false;
 
 document.onkeyup = function (event) {
  	specialKey = event.keyCode;//for checking enter, spacebar
 	pressedKey = event.key;
 	pressedKey=pressedKey.toLowerCase();
 
+
 	//Start/retstart word, pick word, reset boolean variables and necessary resets
-	if(specialKey===13){ //possibly set this to if wins / losses =0 or game just ended
+	if(wins==0 && losses==0 && specialKey==13 && started===false){ //only runs first time when wins=losses=0, and presses enter
+		console.log('first run');
+		started=true;
 		wordToGuess=pickRandomWord(hangmanWordBank);
 		band=wordToGuess;
 		wordToGuess=wordToGuess.split('');
@@ -111,6 +120,8 @@ document.onkeyup = function (event) {
 		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
 		console.log(hiddenWord);
 		$('#word').html(hiddenWord);
+		$('#wins').html('Wins: '+wins);
+		$('#losses').html('Losses: '+losses);
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
@@ -118,15 +129,27 @@ document.onkeyup = function (event) {
 		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
 		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
 		$('#word').html(hiddenWord);
+		win=checkWin(guessArr);
 	} else {
 		console.log('Letter not in Word');
 		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
 		displayHiddenWord(guessArr, wordToGuess);
 	}
 
-	if(winCondition) {
+	if(win) {
+		alert('You won!');
 		wins++;
 		$('#titleOfSong').html(hangmanWordBank[band] + " By " + band);
+		$('#wins').html('Wins :'+wins);
+		console.log('starting new word');
+	//restarting game conditions, create new word and guesses
+		wordToGuess=pickRandomWord(hangmanWordBank);
+		band=wordToGuess;
+		wordToGuess=wordToGuess.split('');
+		guessArr=createBoolWord(wordToGuess);
+		allowedGuesses=Math.max(Math.min(Math.floor(wordToGuess.length*.8),10), 6);
+	} else if (lost){
+		console.log('no win yet');
 	}
 	
 
@@ -137,5 +160,3 @@ document.onkeyup = function (event) {
 		//if win, tally win, change title/image and play song and start at beginning of loop
 		//if loss, tally loss, and start at beginning of loop
 }
-
-wordToGuess=pickRandomWord(hangmanWordBank);
