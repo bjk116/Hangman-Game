@@ -43,7 +43,8 @@ function checkWin (guessA) {
 	console.log('checking');
 	for(var z=0;z<guessA.length;z++) {
 		if (guessA[z]==true) {
-			check++;	
+			check++;
+			console.log(guessA[z]);	
 		}
 	}
 	console.log(check+"true out of"+guessA.length);
@@ -58,12 +59,13 @@ function checkWin (guessA) {
 function createBoolWord(wordGuessarr){
 	var guessArr=[]; //to reset array from preivous words
 	for(var i=0;i<wordGuessarr.length;i++){
-		if(wordGuessarr[i]==''){
+		if(wordGuessarr[i]==' '){
 			guessArr[i]=true;
 		} else {
 		guessArr[i]=false;
 		}
 	}
+	console.log(guessArr);
 	return guessArr;
 }
 
@@ -77,13 +79,36 @@ function updateGuessArray(letter, guessA, wordTG){
 	return guessA;
 }
 
-function letterInWord(letter, WordT){
-	for (var i=0;i<WordT.length;i++) {
-		if(WordT[i].toLowerCase()==letter){
+function letterInWord(letter, word){
+	console.log('checking letter in word');
+	for (var i=0; i<word.length; i++) {
+		if(word[i].toLowerCase()==letter){
+			console.log('word[i]='+word[i]+'letter='+letter);
 			return true;
 		}
 	}
 	return false;
+}
+
+function lost(guessesLeft) {
+	if(guessesLeft==0) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function alreadyGuessed(letter, guessed) {
+	var guess=false;
+	console.log("checking if guessed");
+	for(var i=0;i<guessed.length;i++) {
+		if(guessed[i]==letter) {
+			console.log('already guessed!');
+			guess=true;
+		}
+	}
+
+	return guess;
 }
 
 var wordToGuess, pressedKey, correctGuesses, allowedGuesses;
@@ -104,11 +129,11 @@ document.onkeyup = function (event) {
  	specialKey = event.keyCode;//for checking enter, spacebar
 	pressedKey = event.key;
 	pressedKey=pressedKey.toLowerCase();
-
+	console.log('start');
 
 	//Start/retstart word, pick word, reset boolean variables and necessary resets
-	if(wins==0 && losses==0 && specialKey==13 && started===false){ //only runs first time when wins=losses=0, and presses enter
-		console.log('first run');
+	if(specialKey==13 && started===false){ //only runs first time when wins=losses=0, and presses enter
+		console.log('first run, restsarting word');
 		started=true;
 		wordToGuess=pickRandomWord(hangmanWordBank);
 		band=wordToGuess;
@@ -122,18 +147,33 @@ document.onkeyup = function (event) {
 		$('#word').html(hiddenWord);
 		$('#wins').html('Wins: '+wins);
 		$('#losses').html('Losses: '+losses);
+		$('#guessesLeft').html('Guesses: '+allowedGuesses);
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
-		guessArr=updateGuessArray(pressedKey,guessArr,wordToGuess);
-		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
-		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
-		$('#word').html(hiddenWord);
-		win=checkWin(guessArr);
+		if(alreadyGuessed(pressedKey, lettersGuessed)) {
+			//do nothing
+		} else {
+			guessArr=updateGuessArray(pressedKey,guessArr,wordToGuess);//update boolean array
+			lettersGuessed.push(pressedKey); //Keeping track of guessed letters
+			hiddenWord=displayHiddenWord(guessArr, wordToGuess);
+			$('#word').html(hiddenWord);
+			win=checkWin(guessArr);
+			$('#guessedLetters').html(lettersGuessed.join(', '));
+		}
 	} else {
 		console.log('Letter not in Word');
-		lettersGuessed.push(pressedKey); //Keeping track of guessed letters
-		displayHiddenWord(guessArr, wordToGuess);
+		if (alreadyGuessed(pressedKey, lettersGuessed)) {
+			console.log('already guessed!');
+		} else {
+			lettersGuessed.push(pressedKey); //Keeping track of guessed letters
+			allowedGuesses--;
+			displayHiddenWord(guessArr, wordToGuess);
+			lose=lost(allowedGuesses);
+			console.log('Lost?: '+lose);
+			$('#guessesLeft').html('Guesses: '+allowedGuesses);
+			$('#guessedLetters').html(lettersGuessed.join(', '));
+		}
 	}
 
 	if(win) {
@@ -143,13 +183,39 @@ document.onkeyup = function (event) {
 		$('#wins').html('Wins :'+wins);
 		console.log('starting new word');
 	//restarting game conditions, create new word and guesses
+		console.log("won, restarting word");
 		wordToGuess=pickRandomWord(hangmanWordBank);
 		band=wordToGuess;
 		wordToGuess=wordToGuess.split('');
 		guessArr=createBoolWord(wordToGuess);
 		allowedGuesses=Math.max(Math.min(Math.floor(wordToGuess.length*.8),10), 6);
-	} else if (lost){
-		console.log('no win yet');
+		lettersGuessed=[];
+	//show new word, guesses
+		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
+		console.log(hiddenWord);
+		$('#word').html(hiddenWord);
+		$('#guessesLeft').html("Guesses: "+allowedGuesses);
+		$('#guessedLetters').html(lettersGuessed.join(', '));
+		win=false;//reset win value
+	}
+	if (lose){
+		losses++;
+		$('#losses').html("Losses: "+losses);
+	//restarting game conditions, create new word and guesses
+		console.log("lost, restarting word");
+		wordToGuess=pickRandomWord(hangmanWordBank);
+		band=wordToGuess;
+		wordToGuess=wordToGuess.split('');
+		guessArr=createBoolWord(wordToGuess);
+		allowedGuesses=Math.max(Math.min(Math.floor(wordToGuess.length*.8),10), 6);
+		lettersGuessed=[];
+	//show new word
+		hiddenWord=displayHiddenWord(guessArr, wordToGuess);
+		console.log(hiddenWord);
+		$('#word').html(hiddenWord);
+		$('#guessesLeft').html("Guesses: "+allowedGuesses);
+		$('#guessedLetters').html(lettersGuessed.join(', '));
+		lose=false;//reset lose value
 	}
 	
 
