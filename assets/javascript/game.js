@@ -1,14 +1,14 @@
 var hangmanWordBank = {
-	"Nirvana":"Smells Like Teen Spirit",
-	"Britney Spears":"Hit Me Baby One More Time",
-	"Bush":"Glyercine",
-	"Goo Goo Dolls":"Iris",
-	"SmashMouth":"All Star",
-	"Metallica":"Enter Sandman",
-	"The Gin Blossoms":"Hey Jealousy",
-	"Backstreet Boys": "I Want it That Way",
-	"Shaggy": "Wasn't Me",
-	"Destinys Child": "Say My Name",
+	"Nirvana":["Smells Like Teen Spirit", "assets/images/Nirvana.jpg"],
+	"Britney Spears":["Hit Me Baby One More Time", "assets/images/BirtneySpears.jpg"],
+	"Bush":["Glyercine", "assets/images/Bush.jpg"],
+	"Goo Goo Dolls":["Iris", "assets/images/GooGooDolls.jpg"],
+	"SmashMouth":["All Star", "assets/images/Smashmouth.jpg"],
+	"Metallica":["Enter Sandman", "assets/images/Metallica.jpg"],
+	"The Gin Blossoms":["Hey Jealousy", "assets/images/TheGinBlossoms.jpg"],
+	"Backstreet Boys": ["I Want it That Way", "assets/images/BackstreetBoys.jpg"],
+	"Shaggy": ["Wasn't Me", "assets/images/Shaggy.jpg"],
+	"Destinys Child": ["Say My Name", "assets/images/DesintysChild.jpg"],
 };
 
 //Ask why this works, not sure - http://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
@@ -124,6 +124,7 @@ var winCondition=false;
 var started=false;
 var win=false;
 var lose=false;
+var image;
 
 document.onkeyup = function (event) {
  	specialKey = event.keyCode;//for checking enter, spacebar
@@ -179,9 +180,12 @@ document.onkeyup = function (event) {
 	if(win) {
 		alert('You won!');
 		wins++;
-		$('#titleOfSong').html(hangmanWordBank[band] + " By " + band);
+		$('#titleOfSong').html(hangmanWordBank[band][0] + " By " + band);
 		$('#wins').html('Wins :'+wins);
 		console.log('starting new word');
+	//changeimage
+		image=hangmanWordBank[band][1];
+		$('#winImage').attr('src',image);
 	//restarting game conditions, create new word and guesses
 		console.log("won, restarting word");
 		wordToGuess=pickRandomWord(hangmanWordBank);
@@ -197,6 +201,7 @@ document.onkeyup = function (event) {
 		$('#guessesLeft').html("Guesses: "+allowedGuesses);
 		$('#guessedLetters').html(lettersGuessed.join(', '));
 		win=false;//reset win value
+		console.log(hangmanWordBank[band][1]);
 	}
 	if (lose){
 		losses++;
