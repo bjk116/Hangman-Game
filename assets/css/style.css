@@ -1,7 +1,7 @@
 .jumbotron, .jumbotron-fluid{
 	padding-top:5px;
 	background-image: url('../images/jumbobg.png');
-	height:auto;/*fix based on media query*/
+	height:170px;/*fix based on media query*/
 	border-bottom-style:solid;
 	border-bottom-width: 10px;
 	border-bottom-color:#000000;
@@ -17,19 +17,17 @@
 
 }
 
+#imgDiv{
+	height:300px;
+}
+
+#winImage{
+	margin-top:20px;
+}
+
 body{
 	background-image: url('../images/pixiecup.jpg');
 }
-
-/*
-.gradient-text{ 
-    background-image:-webkit-linear-gradient(left, #00c6c4, #aa0395, #fff);
-    background-image:linear-gradient(to right, #00c6c4, #aa0395, #fff);
-	color:transparent;
-	-webkit-background-clip: text;
-	background-clip: text;
-}
-*/
 
 .col-sm-4 {
 	background-color: #FFFFFF;
@@ -40,4 +38,7 @@ body{
 
 #titleOfSong {
 	background-color:#CCCCCC;
+	border-style: double;
+	border-width:10px;
+	border-color:#FFFFFF;
 }

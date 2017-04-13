@@ -149,6 +149,7 @@ document.onkeyup = function (event) {
 		$('#wins').html('Wins: '+wins);
 		$('#losses').html('Losses: '+losses);
 		$('#guessesLeft').html('Guesses: '+allowedGuesses);
+		$('#begin').html('');
 	} else if (specialKey<46 || specialKey>91) { //Not counting non-alphetbet choices
 		alert("Please choose a letter");
 	} else if(letterInWord(pressedKey, wordToGuess)) {//checking if key press is acutally in the word
